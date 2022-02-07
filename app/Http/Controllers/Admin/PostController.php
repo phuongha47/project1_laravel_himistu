@@ -68,7 +68,7 @@ class PostController extends Controller
         //new image
         $image_post = new Image;
         //save image
-        $image_post->link = $request->images;
+        $image_post->link = $request->images->getClientOriginalName();
         DB::transaction(function () use ($post, $image_post) {
             Post::find($post->id)->images()->save($image_post);
         });

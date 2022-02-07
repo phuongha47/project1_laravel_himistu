@@ -51,22 +51,21 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-12 col-lg-6 d-flex">
-            <a href="index.html" class="site-logo">
+            <a href="{{ route('home.index') }}" class="site-logo">
               Meranda
             </a>
-
             <a href="#" class="ml-auto d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black"><span
                 class="icon-menu h3"></span></a>
 
           </div>
-          <div class="col-12 col-lg-6 ml-auto d-flex">
+          <div class="col-12 col-lg-3 ml-auto d-flex">
            
             <form action="{{ route('home.search') }}" method="GET"  class="search-form d-inline-block">
                 <div class="input-group">  
                     <div class="d-flex">
-                        <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ $searchKeyWord }}">
-                        <div class="">
-                            <button type="submit" class="btn btn-secondary mt-2" ><span class="icon-search"></span></button>
+                        <div class="d-flex">
+                          <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ $searchKeyWord }}">
+                          <button type="submit" class="btn btn-secondary" ><span class="icon-search"></span></button>
                         </div>
                     </div>
               </div>
@@ -80,10 +79,7 @@
         </div>
       </div>
       
-
-
-      
-      <div class="site-navbar py-2 js-sticky-header site-navbar-target d-none pl-0 d-lg-block" role="banner">
+    <div class="site-navbar py-2 js-sticky-header site-navbar-target d-none pl-0 d-lg-block" role="banner">
 
       <div class="container">
         <div class="d-flex align-items-center">
@@ -91,57 +87,37 @@
           <div class="mr-auto">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
-                @foreach ($categories->slice(0, 9) as $category)
-                <li class="active">
-                    <div class="dropdown mr-3">
-                        <a data-toggle="dropdown" href="">{{ $category->name }}<span class="caret"></span></a>
-                        <div class="row">                   
-                    </div>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    @foreach ($categories_sub as $sub)
-                      @if ($sub->parent_id == $category->id)
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ route('userCategory.show', $sub->id) }}">{{ $sub->name }}</a></li>
-                      @endif
-                    @endforeach
-                    </ul>
-                    </div>
-                </li>
-                @endforeach
-              </ul>                                                                                                                                                                                                                                                                                         
+                  @foreach ($categories_with_children->slice(0, 9) as $category)
+                  <li class="active"> 
+                    @if (!$category['children']->isEmpty())   
+                      <div class="dropdown ml-5">
+                          <a class="nav-link text-left" href="{{ route('userCategory.showCategory', $category->id) }}"  > {{ $category->name }}</a>
+                          <div class="dropdown-menu">
+                            @foreach ($category->children as $chil)
+                              <a class="dropdown-item " href="{{ route('userCategory.show', $chil->id) }}">{{ $chil->name }}<span class="caret"></span></a>
+                                      
+                            @endforeach
+                          </div>
+                      </div>
+                    @else
+                    <div class="ml-5">
+                          <a style="color:black", ="nav-link text-left" href="{{ route('userCategory.showCategory', $category->id) }}"  > {{ $category->name }}</a>     
+                      </div> 
+                      @endif    
+     
+                  </li>
+                  @endforeach
+                </ul>                                                                                                                                                                                                                                                                                           
             </nav>
-          </div>    
+         
         </div>
       </div>
+
     </div>
     
     </div>
+    
 
-    <div class="site-section py-0">
-      <div class="owl-carousel hero-slide owl-style">
-      @foreach($slide_posts as $post)
-
-        <div class="site-section">
-          <div class="container">
-            <div class="half-post-entry d-block d-lg-flex bg-light">
-              <div class="img-bg"> <img src="..\img\What-is-Laravel-Seeder.webp" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt=""> </div>
-              <div class="contents">
-                <span class="caption">Editor's Pick</span>
-                <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
-                <p class="mb-3">{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p>
-                
-                <div class="post-meta">
-                  <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">Food</a></span>
-                  <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-    @endforeach
-
-      </div>
-    </div>
 
     <div class="site-section">
       <div class="container">
@@ -150,23 +126,22 @@
             <div class="row">
               <div class="col-12">
                 <div class="section-title">
-                  <h2>Hot news</h2>
+                <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>Hot news</h2></a>
                 </div>
                 @foreach ($latest_posts as $post)
-
               </div>
             </div>
             <div class="row">
               <div class="col-md-6">
               @if ($loop->first)
                 <div class="post-entry-1">
-                  <a href="post-single.html"><img src="images/img_h_1.jpg" alt="Image" class="img-fluid"></a>
-                  <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
-                  <p>{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p>
-                  <div class="post-meta">
-                    <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                    <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
-                  </div>
+                  @foreach($img_posts as $img)
+                    @if ($img->imageable_id == $post->id)
+                      <img style="width:300px" src="{{ $img->link }}" alt="">
+                    @endif
+                  @endforeach
+                  <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
+                  <p>{{ \Illuminate\Support\Str::limit($post->body, 200, $end='...') }}</p>
                   @endif
               @endforeach
                 </div>
@@ -177,106 +152,96 @@
               @foreach($latest_posts->slice(0, 4) as $k => $post)
               @if ($k > 0)
                 <div class="post-entry-2 d-flex bg-light">
-                  <div class="thumbnail" style="background-image: url('images/img_v_1.jpg')"></div>
+                  @foreach($img_posts as $img)
+                      @if ($img->imageable_id == $post->id)
+                        <a href="{{ route('userPost.show', $post->id) }}" class="mt-3 ml-3"><img style="width:150px; height:150px" src="{{ $img->link }}" alt=""></a> 
+                      @endif
+                  @endforeach
                   <div class="contents">
-                    <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
+                    <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
                     <div class="post-meta">
-                      <span class="d-block"><a href="#">{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</a> in <a href="#">News</a></span>
+                      <span class="d-block">{{ \Illuminate\Support\Str::limit($post->body, 80, $end='...') }} <a href="#"></a></span>
                     </div>
+
                   </div>
                 </div>
                 @endif
                 @endforeach
-                <a href="#" class="more">See All Editor's Pick <span class="icon-keyboard_arrow_right"></span></a>
+                <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" class="more">See All <span class="icon-keyboard_arrow_right"></span></a>
               </div>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="section-title">
-              <h2>Trending</h2>
+            <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>Trending</h2></a>
             </div>
-                @foreach($posts->slice(0, 3) as $post)
+                @foreach($world_posts->slice(0, 3) as $post)
                 <div class="trend-entry d-flex">
-                <div class="number align-self-start">01</div>
+                <div class="number align-self-start">{{ $loop->index + 1 }}</div>
                 <div class="trend-contents">
-                    <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
+                    <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
                     <div class="post-meta">
-                    <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span>{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}<span class="icon-star2"></span></span>
-                    </div>
+                    <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span>{{ \Illuminate\Support\Str::limit($post->body, 275, $end='...') }}<span class="icon-star2"></span></span>
+                  </div>
+
                 </div>
                 </div>
                 @endforeach
             <p>
-              <a href="#" class="more">See All Trends <span class="icon-keyboard_arrow_right"></span></a>
+              <a href="{{ route('userCategory.showCategory', $world_posts[0]->category['parent_id']) }}" class="more">See All <span class="icon-keyboard_arrow_right"></span></a>
             </p>
 
           </div>
         </div>
-      </div>
-    </div>
+    
     <!-- END section -->
-
-    <div class="py-0">
-      <div class="container">
-        <div class="half-post-entry d-block d-lg-flex bg-light">
-          <div class="img-bg" style="background-image: url('images/big_img_1.jpg')"></div>
-          <div class="contents">
-            <span class="caption">Editor's Pick</span>
-            <h2><a href="blog-single.html">News Needs to Meet Its Audiences Where They Are</a></h2>
-            <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate vero obcaecati natus adipisci necessitatibus eius, enim vel sit ad reiciendis. Enim praesentium magni delectus cum, tempore deserunt aliquid quaerat culpa nemo veritatis, iste adipisci excepturi consectetur doloribus aliquam accusantium beatae?</p>
-            
-            <div class="post-meta">
-              <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">Food</a></span>
-              <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="site-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-6">
             <div class="section-title">
-              <h2>World news</h2>
+            <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>World</h2></a>
                 </div>
-                  @foreach($posts->slice(0,4) as $post)
-                    <tr>
-                    <td> {{ $loop->index }} </td>
-                    <td>{{ $post->name }}</td>
-                    <td><a href=""><h6>{{ $post->title }}</h6></a> </td>
-                    <td class = "col-10 text-left"><p>{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p></td>
-                    
-                    </tr>
+                @foreach($world_posts->slice(0,2) as $post)
+                <div class="post-entry-1 d-flex">
+                  @foreach($img_posts as $img)
+                      @if ($img->imageable_id == $post->id)
+                      <a href="{{ route('userPost.show', $post->id) }}"><div class="thumbnail"><img style="width:150px" src="{{ $img->link }}" alt=""></div></a>
+                      @endif
                   @endforeach
-                  <br>
-                  <a href="#" class="more">See All Politics <span class="icon-keyboard_arrow_right"></span></a>
-              </div>
-
-
-          <div class="col-lg-6">
-            <div class="section-title">
-              <h2>Business</h2>
-            </div>
-            @foreach($posts->slice(0,4) as $post)
-            <div class="post-entry-2 d-flex">
-              <div class="thumbnail" style="background-image: url('images/img_v_1.jpg')"></div>
-              <div class="contents">
-                <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
-                <p class="mb-3">{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p>
-                <div class="post-meta">
-                  <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                  <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
+                  <div class="ml-3 contents">
+                    <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
+                    <p class="mb-3">{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p>
+                  </div>
                 </div>
+                @endforeach
+                  <br>
+                  <a href="{{ route('userCategory.showCategory', $world_posts[0]->category['parent_id']) }}" class="more">See All<span class="icon-keyboard_arrow_right"></span></a>
               </div>
-            </div>
-            @endforeach
-          </div>
+
+
+              <div class="col-lg-6">
+            <div class="section-title">
+            <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>Business</h2></a>
+                </div>
+                @foreach($business_posts->slice(0,2) as $post)
+                <div class="post-entry-1 d-flex">
+                  @foreach($img_posts as $img)
+                      @if ($img->imageable_id == $post->id)
+                      <a href="{{ route('userPost.show', $post->id) }}"><div class="thumbnail"><img style="width:150px" src="{{ $img->link }}" alt=""></div></a>
+                      @endif
+                  @endforeach
+                  <div class="ml-3 contents">
+                    <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
+                    <p class="mb-3">{{ \Illuminate\Support\Str::limit($post->body, 270, $end='...') }}</p>
+                  </div>
+                </div>
+                @endforeach
+                  <br>
+                  <a href="{{ route('userCategory.showCategory', $world_posts[0]->category['parent_id']) }}" class="more">See All<span class="icon-keyboard_arrow_right"></span></a>
+              </div>
         </div>
-      </div>
-    </div>
 
 
 
@@ -285,50 +250,52 @@
         <div class="row">
           <div class="col-lg-9">
             <div class="section-title">
-              <h2>Recent News</h2>
+            <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>Tech</h2></a>
             </div>
-            @foreach($posts->slice(0,4) as $post)
+            @foreach($tech_posts->slice(0,4) as $post)
             <div class="post-entry-2 d-flex">
-              <div class="thumbnail order-md-2" style="background-image: url('images/img_h_4.jpg')"></div>
-              <div class="contents order-md-1 pl-0">
-                <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
+               @foreach($img_posts as $img)
+                  @if ($img->imageable_id == $post->id)
+                  <a href="{{ route('userPost.show', $post->id) }}"><img style="width:150px" src="{{ $img->link }}" alt=""></a>
+                  @endif
+                @endforeach
+              <div class="ml-3 contents order-md-1 pl-0">
+                <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
                 <p class="mb-3">{{ \Illuminate\Support\Str::limit($post->body, 250, $end='...') }}</p>
-                <div class="post-meta">
-                  <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                  <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
-                </div>
               </div>
             </div>
             @endforeach
-            <a href="#" class="more">See All Recent News <span class="icon-keyboard_arrow_right"></span></a>
+            <a href="{{ route('userCategory.showCategory', $tech_posts[0]->category['parent_id']) }}" class="more">See All  <span class="icon-keyboard_arrow_right"></span></a>
           </div>
           
           <div class="col-lg-3">
             <div class="section-title">
-              <h2>Popular Posts</h2>
+              <a href="{{ route('userCategory.showCategory', $latest_posts[0]->category['parent_id']) }}" > <h2>Health </h2></a>
             </div>
-            @foreach($posts->slice(0,4) as $post)
+            @foreach($health_posts->slice(0,2) as $post)
             <div class="trend-entry d-flex">
-              <div class="number align-self-start">01</div>
               <div class="trend-contents">
-                <h2><a href="blog-single.html">{{ $post->title }}</a></h2>
-                <div class="post-meta">
-                  <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                  <span class="date-read">Jun 14 <span class="mx-1">&bullet;</span> 3 min read <span class="icon-star2"></span></span>
-                </div>
+                 @foreach($img_posts as $img)
+                  @if ($img->imageable_id == $post->id)
+                  <a href="{{ route('userPost.show', $post->id) }}"><img style="width:80%" src="{{ $img->link }}" alt=""></a>
+                  @endif
+                @endforeach
+                <h2 class="mt-2"><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
+                
               </div>
             </div>
             @endforeach
             
             <p>
-              <a href="#" class="more">See All Popular <span class="icon-keyboard_arrow_right"></span></a>
+              <a href="{{ route('userCategory.showCategory', $health_posts[0]->category['parent_id']) }}" class="more">See All <span class="icon-keyboard_arrow_right"></span></a>
             </p>
           </div>
         </div>
         </div>
       </div>
     </div>
-
+    </div>
+    </div>
     <div class="site-section subscribe bg-light">
       <div class="container">
         <form action="#" class="row align-items-center">

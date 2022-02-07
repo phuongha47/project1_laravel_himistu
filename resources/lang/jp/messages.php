@@ -68,4 +68,13 @@ return [
     "adminAddPost" => "Meranda | ポスト追加",
     "categoryName" => "カテゴリ名",
     "parentCategory" => "親カテゴリ",
+    "search" => "検索",
+    "hotNews" => "ホットなニュース",
+    "Trending" => "トレンド",
+    "World" => "世間",
+    "Business" => "ビジネス",
+    "Tech" => "テクノロジー",
+    "Health" => "健康",
+    "seeAll" => "一覧を見る",
+    
 ];

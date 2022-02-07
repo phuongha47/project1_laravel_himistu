@@ -50,9 +50,12 @@ class UserPostController extends Controller
      */
     public function show($id)
     {
-        $image_post = Post::findOrFail($id)->load('images');
-
-        return view($this->path_to_view . 'detailPostUser', compact(['image_post']));
+        $post = Post::findOrFail($id);
+        $imgs_post = Image::where('imageable_type', 'App\Models\Post')->get();
+        //Lastest news
+        $latest_posts = Post::orderBy('created_at', 'desc')->take(10)->get();
+                
+        return view($this->path_to_view . 'detailPostUser', compact(['post', 'imgs_post', 'latest_posts']));
     }
 
     /**

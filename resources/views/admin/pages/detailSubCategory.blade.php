@@ -128,8 +128,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-9">
-          <div class="section-title">
-              <a href="{{ route('userCategory.showCategory', $posts[0]->category['parent_id']) }}" ><h2>{{ $parent_name }}</h2></a>
+            <div class="section-title">
+              <a href="{{ route('userCategory.showCategory', $posts[0]->category['parent_id']) }}" ><h2>{{ $posts[0]->category['name'] }}</h2></a>
             </div>
             @foreach($posts as $post)
 
@@ -141,23 +141,22 @@
                   @endforeach              
                 <div class="ml-3 contents order-md-1 pl-0">
                 <h2><a href="{{ route('userPost.show', $post->id) }}">{{ $post->title }}</a></h2>
-                <p class="w-30"> {{ \Illuminate\Support\Str::limit($post->body, 350, $end='...') }}</p>
+                <p class="mb-3"> {{ \Illuminate\Support\Str::limit($post->body, 350, $end='...') }}</p>
+                <div class="post-meta">
+                  <span class="d-block"><a href="#">{{ $post->user['name'] }} </a> in <a href="#">News</a></span>
+                  <span class="date-read">{{ $post->created_at }}<span class="mx-1">&bullet;</span> <span class="icon-star2"></span></span>
+                </div>
+              </div>
+            </div>
+  @endforeach
+  <div>    {{ $posts->links("pagination::bootstrap-4")}}
 
-
-            <div class="pt-5 ">
-            <h6 class="mb-4">
-                <a href="{{ route('userCategory.show', $post->category_id) }}">Category: {{ $post->category->name }}</a>
-            </h6>
-
-            </div>            
-        </div>
-          </div>      
-          @endforeach
-          <div>    {{ $posts->links("pagination::bootstrap-4")}}
-
-        </div>
       </div>
-      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
 
     <div class="site-section subscribe bg-light">
       <div class="container">
@@ -225,3 +224,5 @@
   <script src="/resouce/meranda-master/js/main.js"></script>
 
 </body>
+
+</html>

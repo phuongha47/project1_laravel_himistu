@@ -24,11 +24,12 @@ use App\Http\Controllers\Users\UserCategoryController;
 //     return view('welcome');
 // });
 
-Route::get('/', 'Users\HomeController@show');
+Route::get('/', 'Users\HomeController@show')->name('home.index');
 Route::get('/show/{id}', 'Users\HomeController@show')->name('home.category');
 Route::get('/search', 'Users\HomeController@search')->name('home.search');
 
 Route::get('/category/show/{id}', 'Users\UserCategoryController@show')->name('userCategory.show');
+Route::get('/category/showCategory/{id}', 'Users\UserCategoryController@showCategory')->name('userCategory.showCategory');
 
 Route::get('/show/{id}', 'Users\UserPostController@show')->name('userPost.show');
 
